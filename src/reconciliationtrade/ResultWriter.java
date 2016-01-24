@@ -1,5 +1,4 @@
 package reconciliationtrade;
-//package stringfoundintext;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +31,7 @@ public class ResultWriter {
                         .append("_");
                 break;
             default:
-                System.out.println(instruction); //.concat(SEPARATOR));
+                System.out.println(instruction);
                 char [] dataArray = data.toCharArray();
                 for (int i=0;i<data.length();i++) {
                     switch (dataArray[i]) {
@@ -47,7 +46,7 @@ public class ResultWriter {
                             break;
                     }
                 }
-                System.out.println(); //.concat(data).concat(SEPARATOR));
+                System.out.println();
         }
     }
     
@@ -96,7 +95,6 @@ public class ResultWriter {
         }
         String newFileName = formatNewFileName(newFileContent, newFile);
         if (newFileName.length() > 0) {
-            // TODO rename file
             File fileNewName = new File(newFileName);
             File fileOldName = new File(newFile);
             int copyNumber = 0;
@@ -116,7 +114,6 @@ public class ResultWriter {
     }
     
     private static String formatNewFileName(StringBuilder newFileContent, String newFile) {
-        // TODO write file name creation logic!
         String fileNameNew = newFileContent.toString() ;
         String tempName = newFileContent.substring(0,fileNameNew.length()-1);
         String beginTempName, endTempName;

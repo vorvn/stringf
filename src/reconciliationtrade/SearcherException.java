@@ -1,5 +1,4 @@
 package reconciliationtrade;
-//package stringfoundintext;
 
 /**
  * Auxiliary exceptions.

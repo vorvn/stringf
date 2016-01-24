@@ -1,5 +1,4 @@
 package reconciliationtrade;
-//package stringfoundintext;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.util.logging.Logger;
  * @author vvn
  */
 public class ReconciliationTrade {
-//public class Executor {
     static int COUNT_FOUND_FIELDS = 8 ;
     
     public static void main(String[] args) {
@@ -41,8 +39,8 @@ public class ReconciliationTrade {
         }
 
         Date d = new Date();
-        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy hh:mm");
-        System.out.println(format1.format(d)); //25.02.2013 09:03
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+        System.out.println(format.format(d)); //25.02.2013 09:03
 
         try {
             dataMessage = readUsingFiles(dataSource);
@@ -72,5 +70,4 @@ public class ReconciliationTrade {
     private static String readUsingFiles(String fileName) throws IOException {
         return new String(Files.readAllBytes(Paths.get(fileName)));
     }
-    
 }

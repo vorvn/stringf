@@ -1,5 +1,4 @@
 package reconciliationtrade;
-//package stringfoundintext;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -42,7 +41,6 @@ public class SwiftDataAnalyzer {
             if (lineSearch.length < COUNT_FOUND_FIELDS) {
                 System.out.println("Error: COUNT_FOUND_FIELDS in Line < " + COUNT_FOUND_FIELDS + ". " + instruction);
             } else {
-                // TODO rename local variables
                 String searchMandataryField = lineSearch[0].substring(1, lineSearch[0].length() - 1);
                 int countShiftString = Integer.parseInt(lineSearch[1]);
                 String searchBeginPosition = lineSearch[2].substring(1, lineSearch[2].length() - 1);

@@ -1,10 +1,11 @@
-package stringfoundintext;
+package reconciliationtrade;
+//package stringfoundintext;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import static stringfoundintext.StringFoundInText.countFoundFeilds;
+import static reconciliationtrade.ReconciliationTrade.COUNT_FOUND_FIELDS;
 
 public class SwiftDataAnalyzer {
 
@@ -31,39 +32,39 @@ public class SwiftDataAnalyzer {
         for (String instruction = br.readLine(); instruction != null; instruction = br.readLine()) {
             parseAndExecute(instruction);
         }
+        resultWriter.flushContent();
     }
 
     private void parseAndExecute(String instruction) {
         if (instruction.length() > 0 && instruction.charAt(0) != '#') {
             String[] lineSearch = instruction.split("\\|");
             // lineSearch.length - количество Полей поиска в СтрокеПоиска
-            if (lineSearch.length < countFoundFeilds) {
-                System.out.println("Error: CountFoundFields in Line < 8. " + instruction);
+            if (lineSearch.length < COUNT_FOUND_FIELDS) {
+                System.out.println("Error: COUNT_FOUND_FIELDS in Line < " + COUNT_FOUND_FIELDS + ". " + instruction);
             } else {
                 // TODO rename local variables
-                String aField = lineSearch[0].substring(1, lineSearch[0].length() - 1);
-                int aNumStr = Integer.parseInt(lineSearch[1]);
-                String aFirstStr = lineSearch[2].substring(1, lineSearch[2].length() - 1);
-                int aFirstShift = Integer.parseInt(lineSearch[3]);
-                String aSecondStr = lineSearch[4].substring(1, lineSearch[4].length() - 1);
-                int aSecondShift = Integer.parseInt(lineSearch[5]);
-                String aFormat = lineSearch[6];
-                String aCommand = lineSearch[7];
+                String searchMandataryField = lineSearch[0].substring(1, lineSearch[0].length() - 1);
+                int countShiftString = Integer.parseInt(lineSearch[1]);
+                String searchBeginPosition = lineSearch[2].substring(1, lineSearch[2].length() - 1);
+                int shiftAtBeginPosition = Integer.parseInt(lineSearch[3]);
+                String searchEndPosition = lineSearch[4].substring(1, lineSearch[4].length() - 1);
+                int shiftAtEndPosition = Integer.parseInt(lineSearch[5]);
+                String formatDataSearchOut = lineSearch[6];
+                String commandOutStream = lineSearch[7];
                 
                 resultWriter.append(
                         instruction,
                         dataParser.parse(
-                                aField,
-                                aNumStr,
-                                aFirstStr,
-                                aFirstShift,
-                                aSecondStr,
-                                aSecondShift,
-                                aFormat
+                                searchMandataryField,
+                                countShiftString,
+                                searchBeginPosition,
+                                shiftAtBeginPosition,
+                                searchEndPosition,
+                                shiftAtEndPosition,
+                                formatDataSearchOut
                         ),
-                        getOutputIndex(aCommand.charAt(0))
+                        getOutputIndex(commandOutStream.charAt(0))
                 );
-                
             }
         }
     }

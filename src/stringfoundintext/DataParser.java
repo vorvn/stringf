@@ -1,78 +1,109 @@
-package stringfoundintext;
+package reconciliationtrade;
+//package stringfoundintext;
 
 public class DataParser {
     
-    private final String dataSource;
+    private final String dataMessage;
 
-    public DataParser(String dataSource) {
-        this.dataSource = dataSource;
+    public DataParser(String dataMessage) {
+        this.dataMessage = dataMessage;
     }
 
-//    public String parse(String aField, int aNumStr, String aFirstStr, int aFirstShift, String aSecondStr, int aSecondShift, String aFormat) {
-    public String parse(String s0, int r0, String s1,
-                                            int r1, String s2, int r2, String fs) {
-        String sSearch = " ";
-        int k, kk, kkk, kkkk, k4 ;
-        //k = kk = kkk = kkkk = 0;
-        if (dataSource.indexOf(s0,0) < 0)
-            return sSearch = " Error: 1-param not found.";
-        k = dataSource.indexOf(s0,0);
-        if (r0 < 0) return sSearch = " Error: 2-param < 0.";  
-        for (int i = 0; i < r0; i++)
-        {
-           int akR = dataSource.indexOf("\r",k) ;
-           int akN = dataSource.indexOf("\n",akR) ;
-           if ( k < akR ) k = akR ;
-           if ( k < akN ) k = akN ;
-           if ((dataSource.length() - k)<5) sSearch = " Error: 2-param > endOfFile.";  
+    public String parse(String searchMandataryField, 
+                        int countShiftString, 
+                        String searchBeginPosition,
+                        int shiftAtBeginPosition, 
+                        String searchEndPosition, 
+                        int shiftAtEndPosition, 
+                        String formatDataSearchOut) {
+        String sSearch ;
+        int tempPosition;
+        int tempPositionEnd;
+        if ((tempPosition = getSearchMandataryPosition(searchMandataryField,countShiftString)) < 0) {
+            return " Error: 1-param not found.";
         }    
-        if (dataSource.indexOf(s1,k) < 0) return sSearch = " Error: 3-param not found.";
-        k4 = dataSource.indexOf(s1,k);
-        if ((k4+r1) < 0) return sSearch = " Error: 4-param < beginOfFile.";
-        k = k4 ;
-        if (s1.equals("")) kkkk = k + r1; else kkkk = k4;
-        if (s2.equals("\n")||s2.equals("\\n"))
-        {
-           int akR = dataSource.indexOf("\r",k4) ;
-           int akN = dataSource.indexOf("\n",akR) ;
-           if ( k4 < akR ) k4 = akR ;
-           if ( k4 < akN ) k4 = akN ;
-           if ((dataSource.length() - k4)<5) sSearch = " Error: 4-param > endOfFile.";  
+        if ((tempPosition = getSearchPosition(searchBeginPosition,tempPosition,shiftAtBeginPosition)) < 0) {
+            return " Error: 3-param not found.";
+        }    
+        if ((tempPositionEnd = getSearchPosition(searchEndPosition,tempPosition,shiftAtEndPosition)) < 0) {
+            return " Error: 5-param not found.";
+        }    
+        if ( tempPosition < tempPositionEnd ) {
+            sSearch = dataMessage.substring(tempPosition,tempPositionEnd) ;
+        } else {
+            sSearch = dataMessage.substring(tempPosition,tempPositionEnd) ;
         }
-        else
-        {
-           if (s2.equals("")) kk = k4;
-           else
-           {
-             if (dataSource.indexOf(s2,kkkk+1)<0) return sSearch = " Error: 5-param not found.";
-             kk = dataSource.indexOf(s2,kkkk+1) ;
-             if ( k4 < kk ) k4 = kk + 1 ;
-           }
-           if ( k4 == k ) k4 = k + r1 ;
-        };
-        if ( k+r1 > k4+r2 ) return sSearch = " Error: Position 6-param < 4-param. Length (object) < 0.";  
-        sSearch = dataSource.substring(k+r1, k4+r2);
-        char ch = fs.charAt(0);
-        if (ch =='N')
+        if (formatDataSearchOut.charAt(0)=='N')
         {  
-           kk = fs.length()-1;
-           k = 0;
-           for (int i=1; i<=kk; i++)
+           int lengthDecimal = formatDataSearchOut.length()-1;
+           int number = 0;
+           for (int i=1; i<=lengthDecimal; i++)
            {  
-               kkk =1;
-               if (i<kk) for (int j=1; j<kk; j++) kkk = 10 * kkk;
-               k = k + kkk *(int) (fs.charAt(i)-48);
+               int numUnits =1;
+               if (i<lengthDecimal) for (int j=1; j<lengthDecimal; j++) numUnits = 10 * numUnits;
+               number = number + numUnits *(int) (formatDataSearchOut.charAt(i)-48);
            }            
-           kk = sSearch.length()-1;
-           kkk = sSearch.indexOf(".",0) ;
-           kkkk = sSearch.indexOf(",",0) ;
-           k4 = 0;
-           if ( k4 < kkk ) k4 = kkk ;
-           if ( k4 < kkkk) k4 = kkkk ;
-           if (k4<0) sSearch = sSearch.concat(",");
-           for (int i = 0 ; i<(k-(kk-k4));i++ )
+           int lengthsSearch = sSearch.length()-1;
+           int tempCount;
+           if (sSearch.lastIndexOf('.')<sSearch.lastIndexOf(',')) {
+               tempCount =+ sSearch.lastIndexOf(',');
+           } else {
+               tempCount =+ sSearch.lastIndexOf('.');
+           }
+           if (tempCount<0) sSearch = sSearch.concat(",");
+           for (int i = 0 ; i<(number-(lengthsSearch-tempCount));i++ )
                sSearch = sSearch.concat("0");
         }
+
         return sSearch;
     }
+    
+    private int getSearchMandataryPosition(String searchStringField, int beginSearchPosition) {
+        if (dataMessage.indexOf(searchStringField,0) < 0) {
+           return -1;
+        }   
+        int tempPositionBegin = dataMessage.indexOf(searchStringField,0);
+        if (beginSearchPosition>=0) {
+            for (int i = 0; i < beginSearchPosition; i++)
+            {
+            int tempPositionBeginEndR = dataMessage.indexOf("\r",tempPositionBegin) ;
+            int tempPositionBeginEndN = dataMessage.indexOf("\n",tempPositionBeginEndR) ;
+            if ( tempPositionBegin < tempPositionBeginEndR ) tempPositionBegin = tempPositionBeginEndR ;
+            if ( tempPositionBegin < tempPositionBeginEndN ) tempPositionBegin = tempPositionBeginEndN ;
+            }     
+        } else {
+            for (int i = 0; i < -beginSearchPosition+1; i++)
+            {
+                String tempdataSource = dataMessage.substring(0, tempPositionBegin) ;
+                int tempPositionBeginEndR = tempdataSource.lastIndexOf('\r') ;
+                int tempPositionBeginEndN = tempdataSource.lastIndexOf('\n') ;
+                if ( tempPositionBegin > tempPositionBeginEndR ) tempPositionBegin = tempPositionBeginEndR ;
+                if ( tempPositionBegin > tempPositionBeginEndN ) tempPositionBegin = tempPositionBeginEndN-1 ;
+            }     
+        }    
+        return tempPositionBegin ;
+    }
+    
+    private int getSearchPosition(String searchStringField, int beginSearchPosition, int shiftPosition) {
+        int tempPositionBegin = beginSearchPosition;
+        if (searchStringField.equals("\n")||searchStringField.equals("\\n"))
+        {
+            int tempPositionBeginEndR = dataMessage.indexOf("\r",tempPositionBegin) ;
+            int tempPositionBeginEndN = dataMessage.indexOf("\n",tempPositionBeginEndR) ;
+            if ( tempPositionBegin < tempPositionBeginEndR ) tempPositionBegin = tempPositionBeginEndR ;
+            if ( tempPositionBegin < tempPositionBeginEndN ) tempPositionBegin = tempPositionBeginEndN ;
+        } else {
+            tempPositionBegin = dataMessage.indexOf(searchStringField,beginSearchPosition);
+            if (tempPositionBegin < 0) {
+               return tempPositionBegin;
+            } 
+        }    
+        if ((tempPositionBegin + shiftPosition)<0) {
+            return 0;
+        } else if (((tempPositionBegin + shiftPosition) > dataMessage.length())){
+            return dataMessage.length()-1;
+        } else {
+            return tempPositionBegin + shiftPosition;
+        }
+    }    
 }

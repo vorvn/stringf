@@ -1,5 +1,4 @@
 package reconciliationtrade;
-//package stringfoundintext;
 
 public class DataParser {
     
@@ -16,7 +15,7 @@ public class DataParser {
                         String searchEndPosition, 
                         int shiftAtEndPosition, 
                         String formatDataSearchOut) {
-        String sSearch ;
+        String search ;
         int tempPosition;
         int tempPositionEnd;
         if ((tempPosition = getSearchMandataryPosition(searchMandataryField,countShiftString)) < 0) {
@@ -29,9 +28,9 @@ public class DataParser {
             return " Error: 5-param not found.";
         }    
         if ( tempPosition < tempPositionEnd ) {
-            sSearch = dataMessage.substring(tempPosition,tempPositionEnd) ;
+            search = dataMessage.substring(tempPosition,tempPositionEnd) ;
         } else {
-            sSearch = dataMessage.substring(tempPosition,tempPositionEnd) ;
+            search = dataMessage.substring(tempPosition,tempPositionEnd) ;
         }
         if (formatDataSearchOut.charAt(0)=='N')
         {  
@@ -43,19 +42,19 @@ public class DataParser {
                if (i<lengthDecimal) for (int j=1; j<lengthDecimal; j++) numUnits = 10 * numUnits;
                number = number + numUnits *(int) (formatDataSearchOut.charAt(i)-48);
            }            
-           int lengthsSearch = sSearch.length()-1;
+           int lengthsSearch = search.length()-1;
            int tempCount;
-           if (sSearch.lastIndexOf('.')<sSearch.lastIndexOf(',')) {
-               tempCount =+ sSearch.lastIndexOf(',');
+           if (search.lastIndexOf('.')<search.lastIndexOf(',')) {
+               tempCount =+ search.lastIndexOf(',');
            } else {
-               tempCount =+ sSearch.lastIndexOf('.');
+               tempCount =+ search.lastIndexOf('.');
            }
-           if (tempCount<0) sSearch = sSearch.concat(",");
+           if (tempCount<0) search = search.concat(",");
            for (int i = 0 ; i<(number-(lengthsSearch-tempCount));i++ )
-               sSearch = sSearch.concat("0");
+               search = search.concat("0");
         }
 
-        return sSearch;
+        return search;
     }
     
     private int getSearchMandataryPosition(String searchStringField, int beginSearchPosition) {

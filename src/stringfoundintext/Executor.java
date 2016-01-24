@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Passes control to searching engine
+ * Passes control to searching engine.
  *
  * @author vvn
  */
